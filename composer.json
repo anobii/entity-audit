@@ -1,5 +1,5 @@
 {
-    "name": "anobii/entity-audit-bundle",
+    "name": "anobii/entity-audit",
     "license": "New BSD",
     "keywords": ["Persistence", "Database", "Audit"],
     "description": "Audit for Doctrine Entities",
