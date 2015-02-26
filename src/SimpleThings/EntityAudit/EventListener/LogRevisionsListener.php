@@ -284,9 +284,11 @@ class LogRevisionsListener implements EventSubscriber
                 Type::STRING
             ));
 
-            $sequenceName = $this->platform->supportsSequences()
-                ? $this->platform->getIdentitySequenceName($this->config->getRevisionTableName(), 'id')
-                : null;
+//            $sequenceName = $this->platform->supportsSequences()
+//                ? $this->platform->getIdentitySequenceName($this->config->getRevisionTableName(), 'id')
+//                : null;
+
+            $sequenceName = $this->config->getRevisionTableName() . '_id_seq';
 
             $this->revisionId = $this->conn->lastInsertId($sequenceName);
         }
