@@ -479,6 +479,38 @@ class AuditReader
     }
 
     /**
+     * @param $username
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return Revision[]
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function findRevisionsByUsername($username, $limit = 20, $offset = 0)
+    {
+        $queryString = "
+          SELECT * FROM " . $this->config->getRevisionTableName() . "
+          WHERE username = :username
+          ORDER BY id DESC
+        ";
+        $params = ['username' => $username];
+        $query = $this->platform->modifyLimitQuery($queryString, $limit, $offset);
+
+        $revisionsData = $this->em->getConnection()->fetchAll($query, $params);
+
+        $revisions = array();
+        foreach ($revisionsData AS $row) {
+            $revisions[] = new Revision(
+                $row['id'],
+                \DateTime::createFromFormat($this->platform->getDateTimeFormatString(), $row['timestamp']),
+                $row['username']
+            );
+        }
+        return $revisions;
+    }
+
+    /**
      * Return a list of all revisions.
      *
      * @param int $limit
@@ -574,6 +606,7 @@ class AuditReader
             }
 
             $query = "SELECT " . $columnList . " FROM " . $tableName . " e " . $joinSql . " WHERE " . $whereSQL;
+
             $revisionsData = $this->em->getConnection()->executeQuery($query, $params);
 
             foreach ($revisionsData AS $row) {
