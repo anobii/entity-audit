@@ -53,4 +53,13 @@ class Revision
     {
         return $this->username;
     }
+
+    public function toArray()
+    {
+        return [
+            'rev'       => $this->rev,
+            'timestamp' => $this->timestamp->format('Y-m-d H:i:s'),
+            'username'  => $this->username
+        ];
+    }
 }
